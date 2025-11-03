@@ -1,0 +1,77 @@
+首先connect aws ec2 instance(Linux2/apache)並安裝certbot
+``
+sudo yum install certbot python3-certbot-apache -y
+``
+
+根據這邊修改port 80 https://stackoverflow.com/questions/59549309/unable-to-find-a-virtual-host-listening-on-port-80-please-add-a-virtual-host
+
+在那之前要先修改security group inbound rules 將port 80的source修改為0.0.0.0/0 這樣certbot才能頒發certificate
+``
+cd /etc/httpd/conf.d
+sudo nano yourDomainName.conf
+``
+貼上並儲存
+<VirtualHost *:80>
+    ServerName yourDomainName.com
+    DocumentRoot /var/www/html
+    ServerAlias www.yourDomainName.com
+    ErrorLog /var/www/error.log
+    CustomLog /var/www/requests.log combined
+</VirtualHost>
+
+restart apache
+``
+sudo service httpd restart
+``
+
+檢查virtual host
+``
+httpd -D DUMP_VHOSTS
+``
+
+執行certbot
+``
+ sudo certbot --apache
+``
+
+成功會出現下面
+[ec2-user@ip-172-31-24-177 /]$ sudo certbot --apache
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+
+Which names would you like to activate HTTPS for?
+We recommend selecting either all domains, or all domains in a VirtualHost/server block.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+1: little-lemon.c34klh.xyz
+2: www.little-lemon.c34klh.xyz
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Select the appropriate numbers separated by commas and/or spaces, or leave input
+blank to select all options shown (Enter 'c' to cancel): 1
+Requesting a certificate for little-lemon.c34klh.xyz
+
+Successfully received certificate.
+Certificate is saved at: /etc/letsencrypt/live/little-lemon.c34klh.xyz/fullchain.pem
+Key is saved at:         /etc/letsencrypt/live/little-lemon.c34klh.xyz/privkey.pem
+This certificate expires on 2026-01-18.
+These files will be updated when the certificate renews.
+Certbot has set up a scheduled task to automatically renew this certificate in the background.
+
+Deploying certificate
+Successfully deployed certificate for little-lemon.c34klh.xyz to /etc/httpd/conf.d/little-lemon.c34klh.xyz-le-ssl.conf
+Congratulations! You have successfully enabled HTTPS on https://little-lemon.c34klh.xyz
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+If you like Certbot, please consider supporting our work by:
+ * Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+ * Donating to EFF:                    https://eff.org/donate-le
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+certbot自動續期
+``
+sudo certbot renew --dry-run
+``
+如果要同時註冊多個domain 例如domain www.domain
+先到route 53設定domain的A紀錄 再設定www.domain的cname 此cname會指向domain的A紀錄
+設定好後執行
+``
+sudo certbot --apache -d little-lemon.c34klh.xyz -d www.little-lemon.c34klh.xyz
+``

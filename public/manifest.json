@@ -1,0 +1,68 @@
+{
+  "short_name": "Little Lemon",
+  "name": "Little Lemon",
+  "start_url": "/",
+  "description":"Discover Little Lemon, where culinary excellence meets the charm of local dining. Our restaurant invites you to savor the joy of sharing great food with friends and family.",
+  "display_override": ["minimal-ui", "standalone","fullscreen"],
+  "display": "browser",
+  "theme_color": "#f4ce14",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "./manifest/LogoIco64.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "./manifest/LogoIco32.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "./manifest/LogoIco24.ico",
+      "sizes": "24x24",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "./manifest/LogoIco16.ico",
+      "sizes": "16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "./manifest/LogoIcon192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./manifest/LogoIcon512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "./manifest/screenshot1.png",
+      "sizes": "1262x959",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "./manifest/screenshot2.png",
+      "sizes": "1277x865",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "./manifest/screenshot3.png",
+      "sizes": "360x778",
+      "type": "image/png"
+    },
+    {
+      "src": "./manifest/screenshot4.png",
+      "sizes": "362x778",
+      "type": "image/png"
+    }
+  ]
+}
