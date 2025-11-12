@@ -79,7 +79,7 @@ export const axiosInstance = (accessToken = null) => {
   // }
 
   const instance = axios.create({
-    baseURL: 'http://localhost:5000',
+    baseURL: import.meta.env.VITE_BE_API_URL,
     headers,
     withCredentials: true,
     timeout: 5000
