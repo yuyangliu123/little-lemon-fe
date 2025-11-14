@@ -59,7 +59,7 @@ workbox.routing.registerRoute(
   new workbox.strategies.NetworkFirst()
 );
 
-const networkFetch=['http://localhost:5000/reservation/',"http://localhost:5000/login/"]
+const networkFetch=[`${import.meta.env.VITE_BE_API_URL}/reservation/`,`${import.meta.env.VITE_BE_API_URL}/login/`]
 
 workbox.routing.registerRoute(
   ({ url, request }) => {

@@ -1,19 +1,12 @@
 import { useState, useRef, useEffect, useContext, lazy } from "react";
 import {
-  Flex,
   Heading,
   Input,
   Button,
   InputGroup,
   Stack,
-  InputLeftElement,
-  chakra,
   Box,
-  Link,
-  Avatar,
   FormControl,
-  FormHelperText,
-  InputRightElement,
   useToast,
   HStack,
   Checkbox
@@ -25,7 +18,7 @@ import { useCapslock } from "../provider/CheckCapslock";
 import axios from "axios";
 import { GlobalContext } from "../provider/GlobalModalContext";
 const LoginRotate = lazy(() => import("../Register/LoginRotate"))
-import { Modal, ModalButton, ModalContent, useModal } from "../provider/ModalsSystem.js";
+import { ModalButton, useModal } from "../provider/ModalsSystem.js";
 
 
 
@@ -85,9 +78,8 @@ const Signup = () => {
   //Submit form
   const onSubmit = async (data) => {
     try {
-      const result = await axios.post("http://localhost:5000/signup/register", data);
+      const result = await axios.post(`${import.meta.env.VITE_BE_API_URL}/signup/register`, data);
       // Success case
-      console.log(result);
       toast({
         title: "Sign Up Success",
         description: "",
@@ -95,9 +87,6 @@ const Signup = () => {
         duration: 2000,
       });
       reset();
-      // setTimeout(() => {
-      //   window.location.href = "./";
-      // }, 2000);
       setTimeout(() => {
         replaceContent(<LoginRotate />)
       }, 2000);

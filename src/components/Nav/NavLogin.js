@@ -1,43 +1,30 @@
-import { Box, Button, HStack, Image, List, ListItem, VStack, Text, useToast, ModalContextProvider } from "@chakra-ui/react";
+import { Box, List, ListItem, Text, useToast } from "@chakra-ui/react";
 import { HashLink } from "react-router-hash-link";
-import { jwtDecode } from "jwt-decode";
-import { lazy, useContext, useEffect, useRef, useState } from "react";
-import { MealContext } from "../provider/MealContext.js"
-import { gql, useLazyQuery, useQuery } from '@apollo/client';
-import client from "../provider/apollo-client.js";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import { openDB } from 'idb';
+import { useContext, useRef, useState } from "react";
 import { apiClient } from '../provider/axiosInstanceWithTokenCheck.js';
 import Cookies from 'js-cookie';
 import useClickOutside from "../provider/useClickOutside.js";
-import { ModalContext } from "../provider/ModalContext.js"
 import { GlobalContext } from "../provider/GlobalModalContext.js";
 import { Modal, ModalButton, ModalContent } from "../provider/ModalsSystem.js";
-import navConfig from "./config/navConfig.js";
 import LoginRotate from "../Register/LoginRotate.js";
 import { useToken, useUserRotate } from "../provider/JwtTokenRotate.js";
 import { useNavigate } from "react-router-dom";
 
-// const LoginRotate = lazy(() => import("../Register/LoginRotate"))
 const NavLogin = ({ setIsOpen }) => {
   const [showLogout, setShowLogout] = useState(false);
   const toast = useToast();
-  const { lname, email, availableAccessToken, accessToken, isEmail } = useUserRotate();
+  const { lname, availableAccessToken, accessToken } = useUserRotate();
   const { updateToken } = useToken();
   const navigate = useNavigate();
-  const { modalOpen, setModalOpen, setLoadLogin } = useContext(ModalContext);
   const onLogout = async (e) => {
     if (accessToken) {
       try {
-        let result = await apiClient.post("http://localhost:5000/logout/logout");
+        let result = await apiClient.post(`${import.meta.env.VITE_BE_API_URL}/logout/logout`);
         if (result.status === 200) {
           localStorage.removeItem("accessToken");
           Cookies.remove('X-CSRF-Token');
           toast({ title: "Logged Out Successfully", status: "success", duration: 2000 });
           setTimeout(() => {
-            // window.location.href = "/";
             navigate("/")
             updateToken()
           }, 2000);
@@ -63,7 +50,6 @@ const NavLogin = ({ setIsOpen }) => {
   useClickOutside([logoutRef], () => {
     setShowLogout(false)
   })
-  const { setModalState } = useContext(GlobalContext);
   if (availableAccessToken) {
     return (
       <Box height="auto" position="relative" ref={logoutRef} key="Login">

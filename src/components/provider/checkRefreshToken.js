@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const checkRefreshToken = async (accessToken) => {
   try {
-    const result = await axiosInstance(accessToken).post("http://localhost:5000/login/check-refresh-token");
+    const result = await axiosInstance(accessToken).post(`${import.meta.env.VITE_BE_API_URL}/login/check-refresh-token`);
     if (result.status === 200) {
       const newAccessToken = result.data.accessToken;
       localStorage.setItem("accessToken", newAccessToken);
@@ -16,7 +16,6 @@ export const checkRefreshToken = async (accessToken) => {
   } catch (error) {
     if (error.response && (error.response.status === 400 || error.response.status === 401)) {
 
-      console.log(error.response.data,"checkRefreshToken error --------------------");
       localStorage.removeItem("accessToken");
       Cookies.remove('X-CSRF-Token');
       return null; // Return null if there's an error

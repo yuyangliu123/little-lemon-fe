@@ -83,28 +83,24 @@ const OrderOnline2 = () => {
     }
 
     const baseUrl = search
-      ? `http://localhost:5000/api/search?search=${search}`
+      ? `${import.meta.env.VITE_BE_API_URL}/api/search?search=${search}`
       : category
-        ? `http://localhost:5000/api/order?category=${category}`
-        : `http://localhost:5000/api/api?page=${pageIndex + 1}&limit=${pageLimit}`;
+        ? `${import.meta.env.VITE_BE_API_URL}/api/order?category=${category}`
+        : `${import.meta.env.VITE_BE_API_URL}/api/api?page=${pageIndex + 1}&limit=${pageLimit}`;
 
     return sort ? `${baseUrl}&sort=${sort}` : baseUrl;
   };
 
   const {
     data: pages,
-    error,
-    size,
     setSize,
     isLoading,
-    isValidating
   } = useSWRInfinite(getKey, fetcher, {
     revalidateFirstPage: false,
     revalidateOnFocus: false,
     onSuccess: (data) => {
       // 檢查是否為最後一頁
       const isLastPage = data && data[data.length - 1]?.data?.length === 0;
-      console.log(isLastPage, "islastpage", uiState.showSkeleton, "showSkeleton");
 
       if (isLastPage || category || search) {
         setLocalLoading(false);
@@ -179,10 +175,7 @@ const OrderOnline2 = () => {
 
 
 
-  console.log("url info", location, pages,
-    window.location.href);
 
-  // console.log("searchresult", searchResults, "url", window.location.href);
   const [localLoading, setLocalLoading] = useState(true);
   const observerRef = useRef(null);
   const sentinelRef = useRef(null);
@@ -191,7 +184,6 @@ const OrderOnline2 = () => {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && !isLoading) {
         setSize(prevSize => {
-          console.log("Loading next page, current size:", prevSize);
           return prevSize + 1;
         });
       }
@@ -218,10 +210,8 @@ const OrderOnline2 = () => {
   const dataToDisplay = useMemo(() => {
     return !isLoading
       ? searchResults
-      // :false
       : menu
   }, [isLoading, menu, searchResults])
-  //-----------------------------------------------------------------------------------------
 
   //windowing
   const elements = useMemo(() => {
@@ -334,14 +324,9 @@ const OrderOnline2 = () => {
 
     setRange({ start: 0, end: Math.min(itemInfo.initialShowColNum * itemInfo.eachColCount, Object.keys(elements).length) })
     backToTop()
-
-    // window.scrollTo({  //here
-    //   top: 0
-    // });
   };
 
   const handleCategoryMobileClick = (category) => {
-    const currentUrl = window.location.href;
     const query = new URLSearchParams(window.location.search);
     const currentCategory = query.get('category');
     if (currentCategory && category == currentCategory) {
@@ -362,9 +347,6 @@ const OrderOnline2 = () => {
     setInfiniteScroll(!category);
     setRange({ start: 0, end: Math.min(itemInfo.initialShowColNum * itemInfo.eachColCount, Object.keys(elements).length) })
     backToTop()
-    // window.scrollTo({
-    //   top: 0
-    // });
   };
 
 
@@ -413,14 +395,6 @@ const OrderOnline2 = () => {
       xs: false,
       base: false
     });
-  console.log("selectedCategory", selectedCategory);
-  console.log("elements", elements, "stackMinHeight", stackMinHeight,
-    "range", range,
-    "scrollerRef", scrollerRef,
-    "iteminfo", itemInfo);
-  if (elements) {
-    console.log("e", elements, "large", Math.min(itemInfo.initialShowColNum * itemInfo.eachColCount, Object.keys(itemInfo.elements).length));
-  }
 
 
   if (dataToDisplay) {
@@ -428,7 +402,7 @@ const OrderOnline2 = () => {
       <VStack>
         <Flex minHeight="auto" width="100%" justifyContent="space-between" direction={{ lg: "row", base: "column" }}>
           <Box
-          id="box"
+            id="box"
             width={{ lg: "25%", base: "100%" }}
             backgroundColor="#fbdabb4d"
             height="fit-content"
@@ -463,8 +437,6 @@ const OrderOnline2 = () => {
                     <FoodButton
                       key={value}
                       category={value}
-                      // setMenu={setMenu}
-                      // menu={menu}
                       marginLeft="0"
                     />
                   </Box>
@@ -592,16 +564,10 @@ const OrderOnline2 = () => {
                 </HStack>
                 <Box
                   display={uiState.showSortResultMobile ? "block" : "none"}
-                  // position="absolute"
-                  // backgroundColor="#FFFFFF"
-                  // zIndex="50"
-                  // right="0"
-                  // minWidth="150px"
                   padding="0 2vh 0 2vh"
                   width="100%"
                   height="100%"
                   fontSize="1.5rem"
-                // border="1px solid #ccc"
                 >
                   <RadioGroup
                     onChange={setSelectedSortOption} // Update the selected sort option
@@ -756,13 +722,6 @@ const OrderOnline2 = () => {
                           window.dispatchEvent(new Event('popstate'));
                           backToTop()
                         }}
-                      // padding="4px 12px"
-                      // borderRadius="md"
-                      // backgroundColor="gray.100"
-                      // display="flex"
-                      // alignItems="center"
-                      // gap={2}
-                      // cursor="pointer"
                       >
                         <strong>{new URLSearchParams(window.location.search).get("category")}</strong>
                         <SmallCloseIcon />
@@ -775,13 +734,6 @@ const OrderOnline2 = () => {
                           window.history.pushState(null, "", '/order2');
                           window.dispatchEvent(new Event('popstate'));
                         }}
-                      // padding="4px 12px"
-                      // borderRadius="md"
-                      // backgroundColor="gray.100"
-                      // display="flex"
-                      // alignItems="center"
-                      // gap={2}
-                      // cursor="pointer"
                       >
                         Search for <strong>{new URLSearchParams(window.location.search).get("search")}</strong>
                         <SmallCloseIcon />
@@ -836,7 +788,6 @@ const OrderOnline2 = () => {
                 </Box>
               </Suspense>
             )}
-            {/* {showSkeleton && <OrderOnlineSkeleton numCol={4} numRow={1}/>} */}
 
 
           </Stack>

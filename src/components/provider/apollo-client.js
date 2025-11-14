@@ -23,10 +23,10 @@ const getOrCreateCsrfToken = () => {
 };
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:5000/graphql',
+  uri: `${import.meta.env.VITE_BE_API_URL}/graphql`,
   credentials: "include",
   fetchOptions: {
-    retry: 3, // 重试次数
+    retry: 3, // 重複次數
     retryDelay: (retryCount) => {
       const baseDelay = Math.pow(2, retryCount) * 1000;
       const cappedDelay = Math.min(baseDelay, 10000);
@@ -53,13 +53,13 @@ const authLink = setContext((_, { headers }) => {
   }
 });
 
-// 自定义错误处理逻辑
+// 自定義錯誤處理邏輯
 const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
   if (graphQLErrors) {
     graphQLErrors.forEach(({ message, locations, path, extensions }) => {
       console.error(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
-      
-      // 处理特定错误码
+
+      // 處理特定錯誤碼
       if (extensions?.code) {
         handleErrorByCode(extensions.code, message);
       }
@@ -68,8 +68,8 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
 
   if (networkError) {
     console.error(`[Network error]: ${networkError}`);
-    
-    // 处理网络错误
+
+    // 處理網路錯誤
     if (!networkError.response) {
       toast.error('網絡連接錯誤，請檢查您的網絡設置', {
         position: "bottom-center",
@@ -89,7 +89,7 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
   }
 });
 
-// 错误状态码处理函数
+// 錯誤狀態碼處理func
 const handleErrorByStatus = (status) => {
   const errorMessages = {
     401: 'Unauthorized',
@@ -117,13 +117,12 @@ const handleErrorByStatus = (status) => {
   });
 };
 
-// 错误代码处理函数
+// 錯誤代碼處理func
 const handleErrorByCode = (code, defaultMessage) => {
   const errorMessages = {
     UNAUTHENTICATED: '請重新登錄',
     FORBIDDEN: '權限不足',
     INTERNAL_SERVER_ERROR: '服務器錯誤',
-    // 添加更多自定义错误码映射
   };
 
   const message = errorMessages[code] || defaultMessage;

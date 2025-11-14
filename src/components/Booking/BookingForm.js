@@ -66,7 +66,7 @@ const BookingForm = () => {
 
   const onSubmit = useCallback(async (data) => {
     try {
-      const result = await apiClient.post("http://localhost:5000/reservation/reservation",
+      const result = await apiClient.post(`${import.meta.env.VITE_BE_API_URL}/reservation/reservation`,
         availableAccessToken
           ? { fname, email: identifier, numberOfPeople, resTime, resDate, occasion }
           : { fname: userFname, email: userEmail, numberOfPeople, resTime, resDate, occasion });
@@ -116,7 +116,7 @@ const BookingForm = () => {
       return;
     }
 
-    const result = await apiClient.get(`http://localhost:5000/reservation/checkReservation?resDate=${date}`);
+    const result = await apiClient.get(`${import.meta.env.VITE_BE_API_URL}/reservation/checkReservation?resDate=${date}`);
     if (result) {
       setResAvailable(result.data);
     }

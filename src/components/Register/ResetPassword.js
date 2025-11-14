@@ -6,14 +6,9 @@ import {
   Button,
   InputGroup,
   Stack,
-  InputLeftElement,
-  chakra,
   Box,
   Link,
-  Avatar,
   FormControl,
-  FormHelperText,
-  InputRightElement,
   Checkbox,
   useToast,
   Text,
@@ -51,7 +46,7 @@ const ResetPassword = () => {
       const token = urlParams.get('token');
       const decodeToken = jwtDecode(token)
       try {
-        let result = await axios.post("http://localhost:5000/forgotpassword/checkvalidate", { email: decodeToken.email, token: decodeToken.token });
+        let result = await axios.post(`${import.meta.env.VITE_BE_API_URL}/forgotpassword/checkvalidate`, { email: decodeToken.email, token: decodeToken.token });
         if (result.status === 400) {
           setResetState(prevState => ({ ...prevState, updated: true, error: true }))
         } else if (result.status === 200) {
@@ -86,7 +81,7 @@ const ResetPassword = () => {
   //Submit form
   const onSubmit = async (data) => {
     try {
-      let result = await axios.post("http://localhost:5000/forgotpassword/reset", { email: resetState.email, password });
+      let result = await axios.post(`${import.meta.env.VITE_BE_API_URL}/forgotpassword/reset`, { email: resetState.email, password });
       if (result) {
         if (result.status === 200) {
           toast({
