@@ -1,4 +1,4 @@
-import { Box, HStack, Image, Input, InputGroup, InputLeftAddon, InputRightAddon, List, ListItem, Spinner, Text } from "@chakra-ui/react";
+import { Box, HStack, Input, InputGroup, InputLeftAddon, InputRightAddon, List, ListItem, Spinner, Text } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { debounceRAF } from "../provider/debounceRAF";
 import { useContext, useMemo, useRef, useState, useEffect } from "react";
@@ -11,12 +11,12 @@ import { Link } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useForm } from "react-hook-form";
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik } from 'formik';
 import { SmallCloseIcon } from "@chakra-ui/icons";
 const SearchSuggestionBoxMobile = () => {
     const [isOpen, setIsOpen] = useState(false)
     const { searchSuggestion, setSearchSuggestion, setIsSearching, setSearchResults, isSearchingSuggest, setIsSearchingSuggest } = useContext(SearchContext);
-    
+
     const [isLoading, setIsLoading] = useState(false);
     const [isFocus, setIsFocus] = useState(false);
     const [isHover, setIsHover] = useState(false);
@@ -58,7 +58,7 @@ const SearchSuggestionBoxMobile = () => {
         setIsLoading(true);
         setIsSearchingSuggest(true);
         try {
-            const response = await axios.get(`http://localhost:5000/api/search-suggestions?query=${searchString}`);
+            const response = await axios.get(`${import.meta.env.VITE_BE_API_URL}/api/search-suggestions?query=${searchString}`);
             setSearchSuggestion(response.data);
         } catch (error) {
             console.error('Error:', error);
@@ -119,7 +119,7 @@ const SearchSuggestionBoxMobile = () => {
                         alignItems="top"
                         zIndex="1000"
                     >
-                        <Box top="100px" borderRadius={itemInfo.borderRadius} ref={searchBoxRef} position="fixed"  backgroundColor="red" id="searchboxmobile">
+                        <Box top="100px" borderRadius={itemInfo.borderRadius} ref={searchBoxRef} position="fixed" backgroundColor="red" id="searchboxmobile">
                             <Box borderRadius={`${itemInfo.borderRadius} ${itemInfo.borderRadius} 0 0`} backgroundColor={isSearchingSuggest && isOpen ? itemInfo.resultBackgroundColor : ""}>
                                 <Formik
                                     initialValues={{ search: new URLSearchParams(window.location.search).get('search') || '' }}

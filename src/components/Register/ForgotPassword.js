@@ -1,24 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  Flex,
   Heading,
   Input,
   Button,
-  InputGroup,
   Stack,
-  InputLeftElement,
-  chakra,
   Box,
-  Link,
-  Avatar,
   FormControl,
-  FormHelperText,
-  InputRightElement,
-  Checkbox,
   useToast,
   Text
 } from "@chakra-ui/react";
-import { Route } from 'react-router-dom';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -70,7 +60,7 @@ const ForgotPassword = () => {
       const requestBody = {
         ...data,
       };
-      let result = await axios.post("http://localhost:5000/forgotpassword/send",requestBody);
+      let result = await axios.post(`${import.meta.env.VITE_BE_API_URL}/forgotpassword/send`, requestBody);
       if (result.status === 200) {
         //store JWT token in localstorage
         toast({
@@ -98,40 +88,40 @@ const ForgotPassword = () => {
 
   //--------------------------------------------------------------------------------------------------//
   return (
-      <Stack
-        direction="column"
-        marginBottom="2"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Heading color="teal.400">Reset your password</Heading>
-        <Text color="teal.400">{"Enter your email address and we’ll"}<br />{"send you a link to reset your password"}</Text>
-        <Box minW={{ base: "90%", md: "468px" }}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack
-              spacing={4}
-              p="1rem"
-              backgroundColor="white"
-              boxShadow="md"
+    <Stack
+      direction="column"
+      marginBottom="2"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <Heading color="teal.400">Reset your password</Heading>
+      <Text color="teal.400">{"Enter your email address and we’ll"}<br />{"send you a link to reset your password"}</Text>
+      <Box minW={{ base: "90%", md: "468px" }}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Stack
+            spacing={4}
+            p="1rem"
+            backgroundColor="white"
+            boxShadow="md"
+          >
+            <FormControl>
+              <Input ref={emailRef} placeholder="email address" {...register('email')} />
+              {errors.email && <p>{errors.email.message}</p>}
+            </FormControl>
+            {capslockState ? <p>Caps Lock is active!</p> : null}
+            <Button
+              borderRadius={0}
+              type="submit"
+              variant="solid"
+              colorScheme="teal"
+              width="full"
             >
-              <FormControl>
-                <Input ref={emailRef} placeholder="email address" {...register('email')} />
-                {errors.email && <p>{errors.email.message}</p>}
-              </FormControl>
-              {capslockState ? <p>Caps Lock is active!</p> : null}
-              <Button
-                borderRadius={0}
-                type="submit"
-                variant="solid"
-                colorScheme="teal"
-                width="full"
-              >
-                Submit
-              </Button>
-            </Stack>
-          </form>
-        </Box>
-      </Stack>
+              Submit
+            </Button>
+          </Stack>
+        </form>
+      </Box>
+    </Stack>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useUserRotate } from '../../provider/JwtTokenRotate';
 import { usePendingItems } from '../../provider/usePendingItems';
@@ -15,7 +15,7 @@ export const CartPageContextProvider = ({ children }) => {
     const location = useLocation();
     const [oldLocation, setOldLocation] = useState(location.pathname)
     const { identifier, isEmail } = useUserRotate();
-    const { cartItem, setCartItem } = useContext(MealContext);
+    const { setCartItem } = useContext(MealContext);
     const [cartData, setCartData] = useState();
     const [checkoutLogin, setCheckoutLogin] = useState(false)
     const [userInfo, setUserInfo] = useState({ mergeCart: false, sessionId: !isEmail ? identifier : null, accessToken: null })
@@ -23,29 +23,18 @@ export const CartPageContextProvider = ({ children }) => {
     const { addPendingItems, finishPending } = usePendingItems({
         sendToServer:
             async (latestPendingItems) => {
-                console.log("finishPending occur");
 
                 try {
                     const endpoint = userInfo.mergeCart
-                        ? "http://localhost:5000/shoppingcart/mergeCart"
-                        : "http://localhost:5000/shoppingcart/updateCart";
+                        ? `${import.meta.env.VITE_BE_API_URL}/shoppingcart/mergeCart`
+                        : `${import.meta.env.VITE_BE_API_URL}/shoppingcart/updateCart`;
 
                     const payload = userInfo.mergeCart
                         ? { updatedItems: latestPendingItems, userInfo: userInfo }
                         : { updatedItems: latestPendingItems };
                     const result = await apiClient.post(endpoint, payload)
-                    console.log(result, result.status === 200, result.data.result.totalItem, "result.data.result.totalItem");
 
                     if (result.status === 200) {
-                        console.log(result, result.status === 200, result.data.result.totalItem, "result.data.result.totalItem123");
-
-                        // setCartData(prevCartData => ({
-                        //     ...prevCartData,
-                        //     totalAmount: result.data.result.totalAmount,
-                        //         totalItem: result.data.result.totalItem,
-                        //     checkedAmount: result.data.result.checkedAmount,
-                        //     checkedItem: result.data.result.checkedItem,
-                        // }));
                         setCartItem(result.data.result.totalItem)
 
                         setCartData(prevCartData => {
@@ -53,7 +42,7 @@ export const CartPageContextProvider = ({ children }) => {
                             return {
                                 ...prevCartData,
                                 data: prevCartData.data.map(dataItem => {
-                                    // 找到对应的更新项
+                                    // 找到對應的更新項
                                     const updatedItem = result.data.result.data.find(item => item.idMeal === dataItem.idMeal);
                                     return updatedItem ? {
                                         ...dataItem,
@@ -86,13 +75,9 @@ export const CartPageContextProvider = ({ children }) => {
         debounceTime: 1500
     });
     useEffect(() => {
-        console.log("在 Context 中觸發 mergeCart123", oldLocation, location.pathname);
-        console.log("在 Context 中觸發 mergeCart true", location.pathname !== '/cart' && oldLocation === '/cart' && location.pathname !== '/login');
-
         const handleNavigationAndMerge = async () => {
 
             // 檢查用戶狀態和路由，決定是否觸發 mergeCart
-            console.log("在 Context 中觸發 mergeCart456", oldLocation, location.pathname);
             await finishPending()
             // ... mergeCart 的邏輯
             // finishPending()
@@ -100,7 +85,6 @@ export const CartPageContextProvider = ({ children }) => {
         };
         if (location.pathname !== '/cart' && oldLocation === '/cart' && location.pathname !== '/login') {
             handleNavigationAndMerge();
-            console.log("在 Context 中觸發 mergeCart 789", oldLocation, location.pathname);
 
         }
         setOldLocation(location.pathname)

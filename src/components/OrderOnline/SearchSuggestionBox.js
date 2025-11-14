@@ -1,4 +1,4 @@
-import { Box, HStack, Image, Input, InputGroup, InputLeftAddon, InputRightAddon, List, ListItem, Spinner, Text } from "@chakra-ui/react";
+import { Box, HStack, Input, InputGroup, InputLeftAddon, InputRightAddon, List, ListItem, Spinner, Text } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { debounceRAF } from "../provider/debounceRAF";
 import { useContext, useMemo, useRef, useState, useEffect } from "react";
@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useForm } from "react-hook-form";
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik } from 'formik';
 import { SmallCloseIcon } from "@chakra-ui/icons";
 import { backToTop } from "../provider/backToTop";
 const SearchSuggestionBox = () => {
@@ -58,7 +58,7 @@ const SearchSuggestionBox = () => {
         setIsLoading(true);
         setIsSearchingSuggest(true);
         try {
-            const response = await axios.get(`http://localhost:5000/api/search-suggestions?query=${searchString}`);
+            const response = await axios.get(`${import.meta.env.VITE_BE_API_URL}/api/search-suggestions?query=${searchString}`);
             setSearchSuggestion(response.data);
         } catch (error) {
             console.error('Error:', error);
@@ -75,20 +75,12 @@ const SearchSuggestionBox = () => {
 
         const currentUrl = window.location.href;
         const query = new URLSearchParams(window.location.search);
-        const currentSearch = query.get('search');
         let newUrl = searchString
             ? currentUrl.includes('?')
                 ? currentUrl.replace(/(\?.*)/, `?search=${searchString}`)
                 : currentUrl + `?search=${searchString}`
             : "";
 
-        // let newUrl = searchString
-        //     ? currentSearch
-        //         ? currentUrl.replace(/(search=)[^\&]+/, `$1${searchString}`)
-        //         : currentUrl.includes("?")
-        //             ? currentUrl + `&search=${searchString}`
-        //             : currentUrl + `?search=${searchString}`
-        //     : "";
         window.history.pushState(null, "", newUrl);
         window.dispatchEvent(new Event('popstate'));
         backToTop()
@@ -109,16 +101,6 @@ const SearchSuggestionBox = () => {
         setIsOpen(false);
         setIsFocus(false)
     });
-    // const getInitialValueFromURL = () => {
-    //     const params = new URLSearchParams(window.location.search);
-    //     return params.get('search') || '';
-    // };
-
-    // const initialValues = useMemo(() => {
-    //     const params = new URLSearchParams(window.location.search);
-    //     return { search: params.get('search') || '' };
-    // }, [window.location.href])
-    // console.log("ini", initialValues);
 
     return (
         <Box position="relative" borderRadius={itemInfo.borderRadius} ref={searchBoxRef} id="inputbox">

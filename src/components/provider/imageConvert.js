@@ -1,9 +1,8 @@
 import { Image } from '@chakra-ui/react';
-import React from 'react';
 
 export const generateImageUrl = ({ src, imgWidth, auto }) => {
     const encodedSrc = encodeURIComponent(src);
-    return `http://localhost:5000/img?url=${encodedSrc}&w=${imgWidth}&auto=${auto}`;
+    return `${import.meta.env.VITE_BE_API_URL}/img?url=${encodedSrc}&w=${imgWidth}&auto=${auto}`;
 };
 
 export const ImageConvert = ({ src, imgWidth, auto, ...prop }) => {

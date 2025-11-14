@@ -1,24 +1,14 @@
-import { Box, Button, FormControl, HStack, Input, InputGroup, Radio, RadioGroup, Stack, Text, useToast, VStack } from '@chakra-ui/react';
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useUserRotate } from '../provider/JwtTokenRotate';
+import { Box, Button, FormControl, HStack, Input, Radio, RadioGroup, Stack, Text, useToast, VStack } from '@chakra-ui/react';
+import { useEffect, useRef, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCcAmex, faCcJcb, faCcMastercard, faCcVisa } from "@fortawesome/free-brands-svg-icons";
-import axios from 'axios';
 import { apiClient } from '../provider/axiosInstanceWithTokenCheck';
-import { ModalContext } from '../provider/ModalContext';
-import { GlobalContext } from '../provider/GlobalModalContext';
 
 const Payment = () => {
-  const location = useLocation();
   const toast = useToast();
-  const [section, setSection] = useState('');
-  const { fname, email, availableAccessToken } = useUserRotate();
-  const { modalOpen, setModalOpen, setLoadNewAddress } = useContext(ModalContext);
-  const { setModalState } = useContext(GlobalContext);
 
 
   const [activeCards, setActiveCards] = useState({
@@ -72,7 +62,6 @@ const Payment = () => {
   const { register, handleSubmit, control, watch, trigger, formState: { errors, isValid }, setValue } = useForm({
     mode: 'onChange', // Real-time validation
     resolver: yupResolver(schema),
-    // context: { payment: watch('payment') },
     mode: 'onBlur',
     defaultValues: {
       payment: 'cash',
@@ -106,7 +95,6 @@ const Payment = () => {
     }
 
     setActiveCards(newActiveCards);
-    console.log("activeCards", activeCards, "truncatedValue", truncatedValue, "e", e);
 
   };
 
@@ -138,13 +126,12 @@ const Payment = () => {
   }, [payment]);
 
   const onSubmit = async (data) => {
-    console.log("submit work!!");
     try {
       const requestBody = {
         ...data,
         address: getCombinedAddress()
       };
-      const result = await apiClient.post("http://localhost:5000/checkout/checkout", requestBody);
+      const result = await apiClient.post(`${import.meta.env.VITE_BE_API_URL}/checkout/checkout`, requestBody);
       if (result.status === 200) {
         toast({ title: "Submit success", status: "success", duration: 2000 });
       }

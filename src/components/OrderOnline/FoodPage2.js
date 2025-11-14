@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Image, Skeleton, Stack, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, HStack, Skeleton, Stack, Text, VStack } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { MealContext } from "../provider/MealContext";
@@ -9,7 +9,6 @@ import { faHeart as farFaHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { openDB } from 'idb';
 import { apiClient } from '../provider/axiosInstanceWithTokenCheck';
-import Cookies from 'js-cookie';
 import LazyLoadImage from "../provider/LazyLoadImage";
 
 const LIKE_QUERY = gql`
@@ -49,12 +48,11 @@ const FoodPage2 = () => {
 
     // 从URL中提取idMeal（根据你的实际URL结构调整）
     const { strMeal, idMeal } = useParams();
-    const decodedMeal = decodeURIComponent(strMeal);
 
     const [numMeal, setNumMeal] = useState(1);
     const [price, setPrice] = useState();
-    const { cartItem, setCartItem } = useContext(MealContext);
-    const { identifier, isEmail, accessToken } = useUserRotate();
+    const { setCartItem } = useContext(MealContext);
+    const { identifier, isEmail } = useUserRotate();
     const [isLike, setIsLike] = useState(false);
     const { loading, error, data: likeData, refetch } = useQuery(LIKE_QUERY,
         {
@@ -74,26 +72,11 @@ const FoodPage2 = () => {
 
 
 
-    // load isLiked state when not login
-    // useEffect(() => {
-    //     if (!isEmail) {
-    //         const loadLikeData = async () => {
-    //             const db = await initDB();
-    //             let existingCart = await db.get('cart', 'cartData');
-    //             if (existingCart && existingCart.likeItem) {
-    //                 const isLiked = existingCart.likeItem.some(item => item.strMeal === decodedMeal);
-    //                 setIsLike(isLiked);
-    //             }
-    //         };
-    //         loadLikeData();
-    //     }
-    // }, [idMeal, isEmail]);
-
     //load meal info
     useEffect(() => {
         (async () => {
             if (idMeal) {
-                await fetch(`http://localhost:5000/api/foodPage/${idMeal}`)
+                await fetch(`${import.meta.env.VITE_BE_API_URL}/api/foodPage/${idMeal}`)
                     .then(response => response.json())
                     .then(data => {
                         setData(prevMeal => ({ ...prevMeal, ...data }));
@@ -119,7 +102,7 @@ const FoodPage2 = () => {
 
 
         try {
-            let result = await apiClient.post("http://localhost:5000/shoppingcart/like",
+            let result = await apiClient.post(`${import.meta.env.VITE_BE_API_URL}/shoppingcart/like`,
                 {
                     event: "like",
                     likeState: newIsLike ? "like" : "none",
@@ -156,58 +139,13 @@ const FoodPage2 = () => {
         };
 
         try {
-            let result = await apiClient.post("http://localhost:5000/shoppingcart/addToCart", orderData);
+            let result = await apiClient.post(`${import.meta.env.VITE_BE_API_URL}/shoppingcart/addToCart`, orderData);
             if (result.status === 200) {
                 setCartItem(currentCartItem => currentCartItem + numMeal);
             }
         } catch (err) {
             console.log(err);
         }
-        // if (!isEmail) {
-        //     console.log("User is not logged in. Saving order locally.");
-
-        //     // save data to IndexedDB
-        //     const db = await initDB();
-        //     let existingCart = await db.get('cart', 'cartData');
-
-        //     if (existingCart) {
-        //         // Update existing cart data
-        //         existingCart.totalAmount += price;
-        //         existingCart.totalAmount = Number(existingCart.totalAmount.toFixed(2))
-        //         existingCart.totalItem += numMeal;
-
-        //         const existingItemIndex = existingCart.data.findIndex(item => item.idMeal === newOrderItem.idMeal);
-        //         if (existingItemIndex !== -1) {
-        //             existingCart.data[existingItemIndex].numMeal += numMeal;
-        //             existingCart.data[existingItemIndex].cartAmount += price;
-        //         } else {
-        //             existingCart.data.push(newOrderItem);
-        //         }
-        //     } else {
-        //         // Create new cart data
-        //         existingCart = {
-        //             isEmail: isEmail,
-        //             totalAmount: price,
-        //             totalItem: numMeal,
-        //             data: [newOrderItem],
-        //             likeItem: []
-        //         };
-        //     }
-
-        //     await updateDB(Object.assign(existingCart, { idMeal: 'cartData' }));
-        //     setCartItem(currentCartItem => currentCartItem + numMeal);
-        //     return;
-        // } else {
-        //     try {
-        //         let result = await apiClient.post("http://localhost:5000/shoppingcart/addToCart", orderData);
-        //         if (result.status === 200) {
-        //             setCartItem(currentCartItem => currentCartItem + numMeal);
-        //         }
-        //     } catch (err) {
-        //         console.log(err);
-        //     }
-
-        // }
     };
 
     if (loading) {

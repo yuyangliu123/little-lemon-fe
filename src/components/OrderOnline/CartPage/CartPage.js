@@ -1,18 +1,13 @@
-import { gql, useQuery } from '@apollo/client';
-import { Box, Button, Checkbox, HStack, Image, Input, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, useToast, VStack } from '@chakra-ui/react';
+import { Box, Button, Checkbox, HStack, Input, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, VStack } from '@chakra-ui/react';
 import { useToken, useUserRotate } from '../../provider/JwtTokenRotate';
-import { useState, useEffect, useContext, useCallback, useMemo, useRef } from 'react';
-import { MealContext } from '../../provider/MealContext';
+import { useState, useMemo } from 'react';
 import { SmallCloseIcon } from "@chakra-ui/icons";
 import CartPageHeading from './CartPageHeading';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { openDB } from 'idb';
 import { apiClient } from '../../provider/axiosInstanceWithTokenCheck';
-import Cookies from 'js-cookie';
-import { debounceRAF } from '../../provider/debounceRAF';
 import LazyLoadImage from '../../provider/LazyLoadImage';
 import cartPageConfig from './config/cartPageConfig';
-import { usePendingItems } from '../../provider/usePendingItems';
 import { toast } from 'react-toastify'; //import toast
 import { Modal, ModalButton, ModalContent } from '../../provider/ModalsSystem';
 import LoginRotate from '../../Register/LoginRotate';
@@ -39,13 +34,9 @@ const updateDB = async (newData) => {
 };
 
 const CartPage = ({ initialInputValue, loading, error, fetchlike, imageWidth }) => {
-    const { identifier, isEmail } = useUserRotate();
-    // const { cartItem, setCartItem } = useContext(MealContext);
-    // const [userInfo, setUserInfo] = useState({ mergeCart: false, sessionId: !isEmail ? identifier : null, accessToken: null })
-    // const [cartData, setCartData] = useState(initialData);
+    const { isEmail } = useUserRotate();
     const [inputValues, setInputValues] = useState(initialInputValue);
     const { updateToken } = useToken();
-    const location = useLocation();
     const navigate = useNavigate();
     const { addPendingItems, finishPending, userInfo, setUserInfo, cartData, setCartData, setCheckoutLogin } = useCartPage()
 
@@ -62,10 +53,8 @@ const CartPage = ({ initialInputValue, loading, error, fetchlike, imageWidth }) 
             checked: item.checked,
             numMeal: item.numMeal,
         }));
-        console.log("click!", allItems);
 
         // 发送到服务器/Redis
-        // handleCheckState(allItems, isChecked);
         handleCartState({ items: allItems, isChecked: isChecked })
     };
 
@@ -87,7 +76,6 @@ const CartPage = ({ initialInputValue, loading, error, fetchlike, imageWidth }) 
                 newValue: value === null || value === undefined ? item.numMeal : value,
             }));
 
-            console.log(itemsArray, itemsToUpdate, "itemsToUpdate", value, "value1", cartData, itemsToUpdate[0].newValue <= 0);
             if (itemsToUpdate[0].newValue <= 0) {
                 setCartData(prevCartData => {
                     if (!prevCartData) return prevCartData;
@@ -192,14 +180,7 @@ const CartPage = ({ initialInputValue, loading, error, fetchlike, imageWidth }) 
     }
     const mergeCart = async ({ token }) => {
         try {
-            console.log("mergeCart");
-
-            // 只有當 finishPending 完成後才導航
-            // setTimeout(() => {
-            //     navigate('/checkout#deliver');
-            // }, 2000);
-            // setUserInfo(prev => { return { ...prev, unAuthCheckout: false } })
-            const endpoint = "http://localhost:5000/api/mergeCart"
+            const endpoint = `${import.meta.env.VITE_BE_API_URL}/api/mergeCart`
 
             const payload = { userInfo: userInfo, token: token }
             const result = await apiClient.post(endpoint, payload)
@@ -229,7 +210,6 @@ const CartPage = ({ initialInputValue, loading, error, fetchlike, imageWidth }) 
 
             setTimeout(() => {
 
-                console.log("access token update complete");
                 updateToken()
                 navigate('/checkout?useDraft=true#deliver');
                 setCheckoutLogin(false)
@@ -490,12 +470,8 @@ const CartPage = ({ initialInputValue, loading, error, fetchlike, imageWidth }) 
                             <ModalContent>
                                 <LoginRotate onLoginSuccess={async (token) => {
                                     setCheckoutLogin(true)
-                                    console.log("login success!!!! onLoginSuccess", token);
                                     await setUserInfo(prev => { return { ...prev, mergeCart: true, accessToken: token } })
-                                    console.log("mergecart start");
-
                                     await mergeCart({ token: token })
-                                    console.log("mergecart end");
                                 }} />
                             </ModalContent>
                         </Modal>

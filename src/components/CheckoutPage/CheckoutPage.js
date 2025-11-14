@@ -107,7 +107,7 @@ const navigate=useNavigate()
         useDraft: useDraft,
         // itemInfo: itemInfo.info
       };
-      const result = await apiClient.post("http://localhost:5000/checkout/checkout", requestBody);
+      const result = await apiClient.post(`${import.meta.env.VITE_BE_API_URL}/checkout/checkout`, requestBody);
       if (result.status === 200) {
         toast({ title: "Submit success", status: "success", duration: 2000 });
         setTimeout(() => {

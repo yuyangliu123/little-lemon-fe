@@ -45,7 +45,7 @@ function App() {
   useEffect(() => {
     const initializeApp = async () => {
       try {
-        const response = await fetch('http://localhost:5000/init', {
+        const response = await fetch(`${import.meta.env.VITE_BE_API_URL}/init`, {
           method: 'GET',
           credentials: 'include' // 重要：允許設置和讀取 cookies
         });
