@@ -1,22 +1,13 @@
-import { Box, HStack, Radio, RadioGroup, Text, FormControl } from '@chakra-ui/react';
-import { Controller, useForm, useFormContext } from 'react-hook-form';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { Box, } from '@chakra-ui/react';
+import { useFormContext } from 'react-hook-form';
+import { useContext } from 'react';
 import { ModalContext } from '../../provider/ModalContext';
-import { GlobalContext } from '../../provider/GlobalModalContext';
 import { useUserRotate } from '../../provider/JwtTokenRotate';
 import { apiClient } from '../../provider/axiosInstanceWithTokenCheck';
 
 const SetAsDefault = ({ address }) => {
     const {
-        setModalOpen,
-        setOperateAddress,
-        setLoadAddAddress,
-        setAllAddressInfo,
-        setLoadDeleteAddress, } = useContext(ModalContext);
-    const { setModalState } = useContext(GlobalContext);
-    const [editBox, setEditBox] = useState({})
+        setAllAddressInfo, } = useContext(ModalContext);
     const { register, handleSubmit, control, watch, trigger, formState: { errors, isValid }, setValue } = useFormContext()
     const { email } = useUserRotate();
 

@@ -1,8 +1,7 @@
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Collapse, FormControl, Grid, GridItem, HStack, Image, Input, InputGroup, Radio, RadioGroup, Stack, Text, useToast, VStack } from '@chakra-ui/react';
-import React, { lazy, Suspense, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import * as yup from 'yup';
-import { Controller, useForm, useFormContext } from 'react-hook-form';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Controller, useFormContext } from 'react-hook-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCcAmex, faCcJcb, faCcMastercard, faCcVisa } from "@fortawesome/free-brands-svg-icons";
 import { apiClient } from '../provider/axiosInstanceWithTokenCheck';
@@ -22,13 +21,13 @@ import AddAddress from './AddressInfo/AddAddress.js';
 const CheckoutPage = ({ itemInfo, useDraft }) => {
   const location = useLocation();
   const toast = useToast();
-  const { fname, identifier, isEmail, availableAccessToken } = useUserRotate();
+  const { identifier } = useUserRotate();
   const [section, setSection] = useState('');
   const {
     allAddressInfo,
   } = useContext(ModalContext);
 
-const navigate=useNavigate()
+  const navigate = useNavigate()
 
 
   const [activeCards, setActiveCards] = useState({

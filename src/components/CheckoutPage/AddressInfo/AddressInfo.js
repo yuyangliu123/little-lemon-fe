@@ -1,6 +1,6 @@
 import { Box, HStack, Radio, RadioGroup, Text, FormControl, Popover, PopoverTrigger, PopoverContent, PopoverArrow } from '@chakra-ui/react';
-import { Controller, useForm, useFormContext } from 'react-hook-form';
-import React, { lazy, useContext, useEffect, useRef, useState } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
+import React, { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import useClickOutside from '../../provider/useClickOutside';
@@ -12,7 +12,7 @@ import DeleteAddress from './DeleteAddress';
 // const DeleteAddress = lazy(() => import("./DeleteAddress"))
 
 const AddressInfo = ({ allAddressInfo }) => {
-    const [editBox, setEditBox] = useState({})
+    const [setEditBox] = useState({})
     const { register, handleSubmit, control, watch, trigger, formState: { errors, isValid }, setValue } = useFormContext()
 
 
