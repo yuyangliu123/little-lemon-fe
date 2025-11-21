@@ -1,4 +1,4 @@
-import { lazy, Suspense, useContext, useEffect, useState } from "react"
+import { lazy, Suspense, useContext,  useState } from "react"
 import { gql, useQuery } from '@apollo/client';
 
 import CheckoutPageSkeleton from "./CheckoutPageSkeleton.js"

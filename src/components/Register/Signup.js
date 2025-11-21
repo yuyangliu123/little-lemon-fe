@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useContext, lazy } from "react";
+import { useState, useRef, useEffect, lazy } from "react";
 import {
   Heading,
   Input,
@@ -120,7 +120,6 @@ const Signup = () => {
 
   const handleShowClick = () => setShowPassword(!showPassword);
 
-  const { setModalState } = useContext(GlobalContext);
   return (
     <>
       <Stack

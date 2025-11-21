@@ -1,15 +1,13 @@
-import { gql, useQuery, useMutation } from '@apollo/client';
-import { Box, Button, HStack, Image, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, VStack } from '@chakra-ui/react';
+import { gql, useMutation } from '@apollo/client';
+import { Box, Button, HStack, Image, Stack,  Text, VStack } from '@chakra-ui/react';
 import { useUserRotate } from '../provider/JwtTokenRotate';
-import { useState, useEffect, useContext, useMemo } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { MealContext } from '../provider/MealContext';
-import { SmallCloseIcon } from "@chakra-ui/icons";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { openDB } from 'idb';
 import LazyLoadImage from '../provider/LazyLoadImage';
-import useBreakpoint from '../provider/useBreakpoint';
 
 
 const UPDATE_QUERY = gql`

@@ -1,13 +1,7 @@
 import { gql, useQuery, useMutation } from '@apollo/client';
-import { Box, Button, HStack, Image, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, VStack } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { useUserRotate } from '../provider/JwtTokenRotate';
-import { useState, useEffect, useContext, Suspense } from 'react';
-import { MealContext } from '../provider/MealContext';
-import { SmallCloseIcon } from "@chakra-ui/icons";
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { openDB } from 'idb';
+import { useState, Suspense } from 'react';
 import AccountSkeleton from './AccountSkeleton';
 import Account from './Account';
 const MYORDER_QUERY = gql`
@@ -67,7 +61,7 @@ const AccountContainer = () => {
       </Box>
     )
   }
-console.log(initialData,"initialData");
+  console.log(initialData, "initialData");
 
   return (
     <Suspense fallback={<AccountSkeleton />}>

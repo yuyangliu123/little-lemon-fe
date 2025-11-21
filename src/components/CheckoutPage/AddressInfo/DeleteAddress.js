@@ -1,6 +1,5 @@
 import { Box, Button, Heading, HStack, Stack, useToast } from "@chakra-ui/react"
 import { useContext } from "react";
-import { GlobalContext } from "../../provider/GlobalModalContext";
 import { ModalContext } from "../../provider/ModalContext";
 import { useUserRotate } from "../../provider/JwtTokenRotate";
 import { apiClient } from "../../provider/axiosInstanceWithTokenCheck";
@@ -8,13 +7,7 @@ import { useFormContext } from "react-hook-form";
 import { useModal } from "../../provider/ModalsSystem";
 
 const DeleteAddress = ({ addressInfo }) => {
-    const { setModalState } = useContext(GlobalContext);
     const {
-        setModalOpen,
-        // loadNewAddress,
-        // setLoadNewAddress,
-        setLoadDeleteAddress,
-        // setOperateAddress,
         setAllAddressInfo,
     } = useContext(ModalContext);
     const { email } = useUserRotate();

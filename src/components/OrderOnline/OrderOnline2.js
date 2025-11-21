@@ -1,28 +1,20 @@
-import { Box, Button, HStack, Heading, Image, Spinner, Stack, Text, VStack, Skeleton, SkeletonText, useToast, getToastPlacement, Flex, Grid, GridItem, Input, InputGroup, InputLeftAddon, useBreakpointValue, Radio, RadioGroup } from "@chakra-ui/react"; import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import theme from "../../theme.js"
+import { Box,  HStack,  Stack,  VStack, Flex, RadioGroup } from "@chakra-ui/react"; 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Suspense, useContext, useEffect, useMemo, useRef, useState } from "react";
 import FoodButton from "./FoodButton.js";
-import { Route, Router, useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useHandleScroll, WindowElement } from "../provider/window-scroll.js";
 import useClickOutside from "../provider/useClickOutside.js";
 import useBreakpoint from "../provider/useBreakpoint.js";
-import LazyLoadImage from "../provider/LazyLoadImage.js";
-import { assertCompositeType } from "graphql";
 import useSWRInfinite from "swr/infinite"
 import axios from "axios";
-import { debounceRAF } from "../provider/debounceRAF.js";
 import SearchSuggestionBox from "./SearchSuggestionBox.js";
 import { SearchContext } from "../provider/SearchContext.js";
 import ProductItem from "./ProductItem.js";
 import SearchSuggestionBoxMobile from "./SearchSuggestionBoxMobile.js";
 import { SmallCloseIcon } from "@chakra-ui/icons";
 import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { ModalContext } from "../provider/ModalContext.js";
-import LikeItemSkeleton from "./LikeItemSkeleton.js";
 import OrderOnlineSkeleton from "./OrderOnlineSkeleton.js";
-import { object } from "yup";
 import { backToTop } from "../provider/backToTop.js";
 import globalConfig from "../globalConfig.js";
 
