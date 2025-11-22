@@ -72,6 +72,14 @@ Bash
     cd ../packages/little-lemon-fn
     npm start
 
+# 上傳到S3
+npm run build
+開啟git bash
+登入aws sso
+aws sso login --profile <your-profile-name>
+上傳到aws s3
+cd <front-end path>
+aws s3 sync dist/ s3://<your-s3-buckets-name> --delete --profile <your-profile-name>
 📁 專案結構
     little-lemon-fe
     ┣ components

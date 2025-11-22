@@ -1,15 +1,6 @@
-import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 
-const FloatingNav = ({children}) => {
-  const Nav = styled.div`
-  position: fixed;
-  width:100%;
-  z-index:1000; //確保nav在最上層
-  transition: top 0.3s;
-  background-color:#FFFFFF;
-  height:auto;
-`
+const FloatingNav = ({ children }) => {
   const [lastScrollTop, setLastScrollTop] = useState(0);
   const [navBarTop, setNavBarTop] = useState('0');
   useEffect(() => {
@@ -36,9 +27,17 @@ const FloatingNav = ({children}) => {
   }, [lastScrollTop]);
 
   return (
-    <Nav style={{ top: navBarTop }}>
-        {children}
-    </Nav>
+    <Box
+      position="fixed"
+      width="100%"
+      zIndex="1000"
+      backgroundColor="#FFFFFF"
+      height="auto"
+      transition="top 0.3s"
+      top={navBarTop}
+    >
+      {children}
+    </Box>
   );
 }
 

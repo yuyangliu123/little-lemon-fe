@@ -1,7 +1,6 @@
 import { Box, Image, Text, Tooltip } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import Slider from "react-slick";
-import styled from "styled-components"
 import theme from "../../../theme";
 
 const CustomerCard = () => {
@@ -90,14 +89,14 @@ const CustomerCard = () => {
         ],
     };
 
-    const StyledDiv = styled.div`
-        .slick-next:before, .slick-prev:before{
-            color: blue;
-        }
-    `
-
     return (
-        <StyledDiv>
+        <Box
+            sx={{
+                ".slick-next:before, .slick-prev:before": {
+                    color: "blue",
+                },
+            }}
+        >
             <Box backgroundColor="#EDEFEE" height="auto" paddingBottom="5vh">
                 <Box margin="0  15%" padding="3em 0 0 0">
                     <Box as="h1" textStyle="StyledH1" color="black">
@@ -136,7 +135,7 @@ const CustomerCard = () => {
                     </Slider>
                 </Box>
             </Box>
-        </StyledDiv>
+        </Box>
     );
 };
 
