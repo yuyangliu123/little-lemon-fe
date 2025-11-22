@@ -23,7 +23,7 @@ const Home = () => {
       <FullScreenSection backgroundColor="#FFFFFF" height="auto" padding={{ base: "0", [navConfig.showNavSize]: "3vh 0" }}>
         <Main />
       </FullScreenSection>
-      <CustomerCard />
+        <CustomerCard />
       <FullScreenSection backgroundColor="#EE9972" height="auto" padding={{ base: "2vh 0 2vh 0", xxl: "2vh 0 25vh 0" }}>
         <About />
       </FullScreenSection>
