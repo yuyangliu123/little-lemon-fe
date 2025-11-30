@@ -26,8 +26,8 @@ export const CartPageContextProvider = ({ children }) => {
 
                 try {
                     const endpoint = userInfo.mergeCart
-                        ? `${import.meta.env.VITE_BE_API_URL}/shoppingcart/mergeCart`
-                        : `${import.meta.env.VITE_BE_API_URL}/shoppingcart/updateCart`;
+                        ? `shoppingcart/mergeCart`
+                        : `shoppingcart/updateCart`;
 
                     const payload = userInfo.mergeCart
                         ? { updatedItems: latestPendingItems, userInfo: userInfo }

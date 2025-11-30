@@ -19,7 +19,7 @@ const NavLogin = ({ setIsOpen }) => {
   const onLogout = async (e) => {
     if (accessToken) {
       try {
-        let result = await apiClient.post(`${import.meta.env.VITE_BE_API_URL}/logout/logout`);
+        let result = await apiClient.post(`logout/logout`);
         if (result.status === 200) {
           localStorage.removeItem("accessToken");
           Cookies.remove('X-CSRF-Token');

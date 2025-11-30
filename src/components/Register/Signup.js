@@ -19,6 +19,7 @@ import axios from "axios";
 import { GlobalContext } from "../provider/GlobalModalContext";
 const LoginRotate = lazy(() => import("../Register/LoginRotate"))
 import { ModalButton, useModal } from "../provider/ModalsSystem.js";
+import { api } from "../provider/axiosInstanceWithTokenCheck.js";
 
 
 
@@ -78,7 +79,7 @@ const Signup = () => {
   //Submit form
   const onSubmit = async (data) => {
     try {
-      const result = await axios.post(`${import.meta.env.VITE_BE_API_URL}/signup/register`, data);
+      const result = await api.post(`/signup/register`, data);
       // Success case
       toast({
         title: "Sign Up Success",

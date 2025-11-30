@@ -131,7 +131,7 @@ const Payment = () => {
         ...data,
         address: getCombinedAddress()
       };
-      const result = await apiClient.post(`${import.meta.env.VITE_BE_API_URL}/checkout/checkout`, requestBody);
+      const result = await apiClient.post(`checkout/checkout`, requestBody);
       if (result.status === 200) {
         toast({ title: "Submit success", status: "success", duration: 2000 });
       }

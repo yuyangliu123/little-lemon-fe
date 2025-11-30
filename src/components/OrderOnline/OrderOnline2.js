@@ -7,7 +7,6 @@ import { useHandleScroll, WindowElement } from "../provider/window-scroll.js";
 import useClickOutside from "../provider/useClickOutside.js";
 import useBreakpoint from "../provider/useBreakpoint.js";
 import useSWRInfinite from "swr/infinite"
-import axios from "axios";
 import SearchSuggestionBox from "./SearchSuggestionBox.js";
 import { SearchContext } from "../provider/SearchContext.js";
 import ProductItem from "./ProductItem.js";
@@ -17,12 +16,13 @@ import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import OrderOnlineSkeleton from "./OrderOnlineSkeleton.js";
 import { backToTop } from "../provider/backToTop.js";
 import globalConfig from "../globalConfig.js";
+import { api } from "../provider/axiosInstanceWithTokenCheck.js";
 
 // 自定義 fetcher 函數
 const fetcher = async (url) => {
   // 添加 1 秒延遲
   await new Promise(resolve => setTimeout(resolve, 100));
-  const response = await axios.get(url);
+  const response = await api.get(url);
   return response.data
 };
 const OrderOnline2 = () => {
@@ -78,7 +78,7 @@ const OrderOnline2 = () => {
       ? `${import.meta.env.VITE_BE_API_URL}/api/search?search=${search}`
       : category
         ? `${import.meta.env.VITE_BE_API_URL}/api/order?category=${category}`
-        : `${import.meta.env.VITE_BE_API_URL}/api/api?page=${pageIndex + 1}&limit=${pageLimit}`;
+        : `${import.meta.env.VITE_BE_API_URL}/api/product/api?page=${pageIndex + 1}&limit=${pageLimit}`;
 
     return sort ? `${baseUrl}&sort=${sort}` : baseUrl;
   };

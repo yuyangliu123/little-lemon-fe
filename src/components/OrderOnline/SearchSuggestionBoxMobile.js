@@ -13,6 +13,7 @@ import * as yup from 'yup';
 import { useForm } from "react-hook-form";
 import { Formik } from 'formik';
 import { SmallCloseIcon } from "@chakra-ui/icons";
+import { api } from "../provider/axiosInstanceWithTokenCheck";
 const SearchSuggestionBoxMobile = () => {
     const [isOpen, setIsOpen] = useState(false)
     const { searchSuggestion, setSearchSuggestion, setIsSearching, setSearchResults, isSearchingSuggest, setIsSearchingSuggest } = useContext(SearchContext);
@@ -58,7 +59,7 @@ const SearchSuggestionBoxMobile = () => {
         setIsLoading(true);
         setIsSearchingSuggest(true);
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BE_API_URL}/api/search-suggestions?query=${searchString}`);
+            const response = await api.get(`product/search-suggestions?query=${searchString}`);
             setSearchSuggestion(response.data);
         } catch (error) {
             console.error('Error:', error);

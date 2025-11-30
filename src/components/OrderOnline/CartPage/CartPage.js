@@ -180,7 +180,7 @@ const CartPage = ({ initialInputValue, loading, error, fetchlike, imageWidth }) 
     }
     const mergeCart = async ({ token }) => {
         try {
-            const endpoint = `${import.meta.env.VITE_BE_API_URL}/api/mergeCart`
+            const endpoint = `product/mergeCart`
 
             const payload = { userInfo: userInfo, token: token }
             const result = await apiClient.post(endpoint, payload)

@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const checkRefreshToken = async (accessToken) => {
   try {
-    const result = await axiosInstance(accessToken).post(`${import.meta.env.VITE_BE_API_URL}/login/check-refresh-token`);
+    const result = await axiosInstance(accessToken).post(`${import.meta.env.VITE_BE_API_URL}/api/login/check-refresh-token`);
     if (result.status === 200) {
       const newAccessToken = result.data.accessToken;
       localStorage.setItem("accessToken", newAccessToken);

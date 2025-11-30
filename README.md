@@ -76,10 +76,10 @@ Bash
 npm run build
 開啟git bash
 登入aws sso
-aws sso login --profile <your-profile-name>
+aws sso login --profile <YOUR_PROFILE_NAME>
 上傳到aws s3
-cd <front-end path>
-aws s3 sync dist/ s3://<your-s3-buckets-name> --delete --profile <your-profile-name>
+cd <FRONT_END_PATH>
+aws s3 sync dist/ s3://<YOUR_S3_BUCKET_NAME> --delete --profile <YOUR_PROFILE_NAME>
 📁 專案結構
     little-lemon-fe
     ┣ components
