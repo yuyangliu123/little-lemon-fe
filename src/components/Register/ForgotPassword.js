@@ -15,6 +15,7 @@ import * as yup from 'yup';
 import { useForm } from "react-hook-form";
 import { useCapslock } from "../provider/CheckCapslock";
 import axios from "axios";
+import { api } from "../provider/axiosInstanceWithTokenCheck";
 
 // Define Validation Rules
 const schema = yup.object().shape({
@@ -60,7 +61,7 @@ const ForgotPassword = () => {
       const requestBody = {
         ...data,
       };
-      let result = await axios.post(`${import.meta.env.VITE_BE_API_URL}/forgotpassword/send`, requestBody);
+      let result = await api.post(`forgotpassword/send`, requestBody);
       if (result.status === 200) {
         //store JWT token in localstorage
         toast({

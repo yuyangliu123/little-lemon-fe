@@ -16,14 +16,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { useCapslock } from "../provider/CheckCapslock";
-import axios from 'axios'
 import Cookies from 'js-cookie';
 import { v4 as uuidv4 } from 'uuid';
-import { GlobalContext } from "../provider/GlobalModalContext";
 import {  ModalButton, useModal } from "../provider/ModalsSystem.js";
 import { useToken } from "../provider/JwtTokenRotate.js";
 import Signup from "./Signup.js"
 import ForgotPassword from "./ForgotPassword.js"
+import { api } from "../provider/axiosInstanceWithTokenCheck.js";
 
 
 
@@ -83,7 +82,7 @@ const LoginRotate = ({ onLoginSuccess }) => {
       const requestBody = {
         ...data,
       };
-      const result = await axios.post(`${import.meta.env.VITE_BE_API_URL}/login/login`, requestBody, {
+      const result = await api.post(`login/login`, requestBody, {
         withCredentials: true, // Allow credentials (cookies, authorization headers, etc.)
         headers: {
           "Content-Type": "application/json",

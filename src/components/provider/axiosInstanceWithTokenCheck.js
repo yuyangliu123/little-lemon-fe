@@ -79,7 +79,7 @@ export const axiosInstance = (accessToken = null) => {
   // }
 
   const instance = axios.create({
-    baseURL: import.meta.env.VITE_BE_API_URL,
+    baseURL: `${import.meta.env.VITE_BE_API_URL}/api`,
     headers,
     withCredentials: true,
     timeout: 5000
@@ -344,6 +344,95 @@ export const apiClient = {
     const instance = await axiosInstanceWithTokenCheck();
     if (!instance) {
       throw new Error("無法取得有效的 axios 實例，可能 token 刷新失敗。");
+    }
+    return instance.delete(url, config);
+  },
+};
+const headers = {
+    "Content-Type": "application/json",
+  }
+const normalAxios = async () => {
+  const instance = axios.create({
+    baseURL: `${import.meta.env.VITE_BE_API_URL}/api`,
+    headers,
+    withCredentials: true,
+    timeout: 5000
+  })
+  return instance
+}
+
+export const api = {
+  /**
+   * 封裝 GET 請求。
+   * @param {string} url - 請求的 URL
+   * @param {object} [config] - Axios 請求配置
+   * @returns {Promise<any>} - 伺服器回傳的 Promise 物件
+   */
+
+
+  get: async (url, config) => {
+    const instance = await normalAxios();
+    if (!instance) {
+      throw new Error("request fail");
+    }
+    return instance.get(url, config);
+  },
+
+  /**
+   * 封裝 POST 請求。
+   * @param {string} url - 請求的 URL
+   * @param {object} [data] - 請求的資料
+   * @param {object} [config] - Axios 請求配置
+   * @returns {Promise<any>} - 伺服器回傳的 Promise 物件
+   */
+  post: async (url, data, config) => {
+    const instance = await normalAxios();
+    if (!instance) {
+      throw new Error("request fail");
+    }
+    return instance.post(url, data, config);
+  },
+
+  /**
+   * 封裝 PUT 請求。
+   * @param {string} url - 請求的 URL
+   * @param {object} [data] - 請求的資料
+   * @param {object} [config] - Axios 請求配置
+   * @returns {Promise<any>} - 伺服器回傳的 Promise 物件
+   */
+  put: async (url, data, config) => {
+    const instance = await normalAxios();
+    if (!instance) {
+      throw new Error("request fail");
+    }
+    return instance.put(url, data, config);
+  },
+
+  /**
+   * 封裝 PATCH 請求。
+   * @param {string} url - 請求的 URL
+   * @param {object} [data] - 請求的資料
+   * @param {object} [config] - Axios 請求配置
+   * @returns {Promise<any>} - 伺服器回傳的 Promise 物件
+   */
+  patch: async (url, data, config) => {
+    const instance = await normalAxios();
+    if (!instance) {
+      throw new Error("request fail");
+    }
+    return instance.patch(url, data, config);
+  },
+
+  /**
+   * 封裝 DELETE 請求。
+   * @param {string} url - 請求的 URL
+   * @param {object} [config] - Axios 請求配置
+   * @returns {Promise<any>} - 伺服器回傳的 Promise 物件
+   */
+  delete: async (url, config) => {
+    const instance = await normalAxios();
+    if (!instance) {
+      throw new Error("request fail");
     }
     return instance.delete(url, config);
   },

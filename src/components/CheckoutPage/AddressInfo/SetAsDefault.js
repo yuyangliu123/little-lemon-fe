@@ -28,7 +28,7 @@ const SetAsDefault = ({ address }) => {
                 state: "setDefault",
                 uuid: address.uuid
             };
-            const result = await apiClient.post(`${import.meta.env.VITE_BE_API_URL}/checkout/checkoutInfo`, requestBody);
+            const result = await apiClient.post(`checkout/checkoutInfo`, requestBody);
             if (result.status === 200) {
                 setAllAddressInfo((prev) => ({
                     ...prev,

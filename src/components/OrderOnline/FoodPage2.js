@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as farFaHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { openDB } from 'idb';
-import { apiClient } from '../provider/axiosInstanceWithTokenCheck';
+import { api, apiClient } from '../provider/axiosInstanceWithTokenCheck';
 import LazyLoadImage from "../provider/LazyLoadImage";
 
 const LIKE_QUERY = gql`
@@ -76,13 +76,11 @@ const FoodPage2 = () => {
     useEffect(() => {
         (async () => {
             if (idMeal) {
-                await fetch(`${import.meta.env.VITE_BE_API_URL}/api/foodPage/${idMeal}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        setData(prevMeal => ({ ...prevMeal, ...data }));
-                        setPrice(data.price);
-                    })
-                    .catch(err => console.log(err));
+                const result = await api.get(`product/foodPage/${idMeal}`)
+                if (result.status == 200) {
+                    setData(prevMeal => ({ ...prevMeal, ...result.data }));
+                    setPrice(result.data.price);
+                }
             }
         })();
     }, [idMeal]);
@@ -102,7 +100,7 @@ const FoodPage2 = () => {
 
 
         try {
-            let result = await apiClient.post(`${import.meta.env.VITE_BE_API_URL}/shoppingcart/like`,
+            let result = await apiClient.post(`shoppingcart/like`,
                 {
                     event: "like",
                     likeState: newIsLike ? "like" : "none",
@@ -139,7 +137,7 @@ const FoodPage2 = () => {
         };
 
         try {
-            let result = await apiClient.post(`${import.meta.env.VITE_BE_API_URL}/shoppingcart/addToCart`, orderData);
+            let result = await apiClient.post(`shoppingcart/addToCart`, orderData);
             if (result.status === 200) {
                 setCartItem(currentCartItem => currentCartItem + numMeal);
             }
